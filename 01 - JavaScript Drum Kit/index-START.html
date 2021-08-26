@@ -58,7 +58,27 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if(!audio) return;
 
+    audio.currentTime = 0;
+    audio.play();
+    key.classList.add("playing");
+  }
+
+  //I changed this part so that the playing class removes itself when the audio is stopped.
+  //In the first version, when the button was held down longer, the playing class did not delete itself.
+  function removeTransition(e) {
+    const key = document.querySelector(`.key[data-key="${this.dataset.key}"]`);
+    key.classList.remove('playing');
+  }
+
+  window.addEventListener('keydown', playSound);
+  document.querySelectorAll('audio').forEach( audio => {
+    audio.addEventListener('ended', removeTransition)
+  });
 </script>
 
 
