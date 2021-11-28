@@ -62,12 +62,58 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: 1s linear;
     }
 
   </style>
 
   <script>
+    const MAX_DEGREES = 360;
+    const MAX_SECONDS = 60;
+    const MAX_MINUTES = 60;
+    const MAX_HOURS = 12;
 
+    const rotateCounters = {
+      seconds: 0,
+      minutes: 0,
+      hours: 0,
+    }
+
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+
+    const getDegrees = ([maxValue, time, rotateCounter]) => {
+      return ((time / maxValue + rotateCounter) * MAX_DEGREES + 90) + 'deg';
+
+    }
+
+    const setHand = (hand, rotationValues) => {
+      hand.style.transform = `rotate(${getDegrees(rotationValues)})`;
+    }
+
+    const increaseCounters = (date) => {
+      if(date.getSeconds() !== MAX_SECONDS-1) return;
+      rotateCounters.seconds++;
+      if(date.getMinutes() !== MAX_MINUTES-1) return;
+      rotateCounters.minutes++;
+      if(date.getHours() !== MAX_HOURS-1) return;
+      rotateCounter.hours++;
+    }
+
+    setTime = () => {
+      const date = new Date;
+
+      setHand(secondHand, [MAX_SECONDS, date.getSeconds(), rotateCounters.seconds]);
+      setHand(minuteHand, [MAX_MINUTES, date.getMinutes(), rotateCounters.minutes]);
+      setHand(hourHand, [MAX_HOURS, date.getHours(), rotateCounters.hours]);
+
+      increaseCounters(date);
+    }
+
+    setInterval(setTime, 1000);
   </script>
 </body>
 </html>
